@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>teamo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cardo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cardo', serif;
+            text-align: center;
+            background: linear-gradient(to bottom, #ffb6c1, #ff69b4);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            transition: background 3s ease-in-out;
+            position: relative;
+        }
+
+        .container, .letter-box {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            text-align: center;
+            position: relative;
+            width: 90%;
+            max-width: 350px;
+            border: 2px solid white;
+        }
+
+        h1 {
+            font-size: 22px;
+        }
+
+        .heart-big {
+            font-size: 40px;
+            display: block;
+            margin-bottom: 10px;
+            animation: pulse 1.5s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.2); }
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        button {
+            font-size: 18px;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        #yesButton {
+            background-color: #ff4081;
+            color: white;
+        }
+
+        #noButton {
+            background-color: #ddd;
+        }
+
+        button:active {
+            transform: scale(0.9);
+        }
+
+        .emoji {
+            position: absolute;
+            font-size: 25px;
+            top: -10vh;
+            animation: fall 5s linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-15vh); opacity: 1; }
+            100% { transform: translateY(110vh); opacity: 0; }
+        }
+
+        .fade-out {
+            background: black !important;
+            transition: background 3s ease-in-out;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Estilos para la carta 💌 */
+        .letter-box {
+            font-size: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .letter-box span {
+            font-size: 50px;
+            cursor: pointer;
+            animation: pulse 1.5s infinite alternate;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Carta 💌 inicial -->
+    <div class="letter-box" id="letterBox">
+        <span id="letter">💌</span>
+        <p>toca para abrir</p>
+    </div>
+
+    <!-- Contenido principal (oculto inicialmente) -->
+    <div class="container hidden" id="mainContent">
+        <span class="heart-big" id="mainHeart">💓</span>
+        <h1 id="title">Yasminn miamor queres pasar este 14 juntitos miamor?</h1>
+        <div class="buttons">
+            <button id="yesButton">Sí</button>
+            <button id="noButton">No</button>
+        </div>
+    </div>
+
+    <script>
+        let noClickCount = 0;
+        const noButton = document.getElementById("noButton");
+        const yesButton = document.getElementById("yesButton");
+        const title = document.getElementById("title");
+        const mainHeart = document.getElementById("mainHeart");
+        const letterBox = document.getElementById("letterBox");
+        const mainContent = document.getElementById("mainContent");
+
+        const noTexts = [
+            "¿Estás segura?", "¿100% segura?", "¿Segurísima?", 
+            "Pero amor", "Segurita", "Bua, ¿por qué no?", 
+            "Pero si yo te amo", "Dale, decí que sí", "Por favor"
+        ];
+
+        const positions = [
+            { left: "10%", top: "80%" },
+            { left: "80%", top: "10%" },
+            { left: "50%", top: "50%" },
+            { left: "50%", top: "80%" }
+        ];
+
+        let heartInterval, flowerInterval;
+
+        function createEmoji(type) {
+            const emoji = document.createElement("div");
+            emoji.classList.add("emoji");
+            emoji.innerHTML = type;
+            document.body.appendChild(emoji);
+
+            emoji.style.left = Math.random() * 100 + "vw";
+            emoji.style.animationDuration = Math.random() * 3 + 2 + "s";
+
+            setTimeout(() => {
+                emoji.remove();
+            }, 5000);
+        }
+
+        function startHeartsAndFlowers() {
+            heartInterval = setInterval(() => createEmoji("🩷"), 800);
+            flowerInterval = setInterval(() => createEmoji("🌷"), 1200);
+        }
+
+        function stopHeartsAndFlowers() {
+            clearInterval(heartInterval);
+            clearInterval(flowerInterval);
+        }
+
+        startHeartsAndFlowers();
+
+        yesButton.addEventListener("click", function () {
+            title.innerText = "te amo mucho princesita  ❤️";
+
+            let avalancheCount = 0;
+            let avalancheInterval = setInterval(() => {
+                for (let i = 0; i < 5; i++) {
+                    createEmoji("🩷");
+                    createEmoji("🌷");
+                }
+                avalancheCount++;
+                if (avalancheCount > 10) {
+                    clearInterval(avalancheInterval);
+                }
+            }, 200);
+        });
+
+        noButton.addEventListener("click", function () {
+            if (noClickCount < noTexts.length - 1) {
+                noButton.innerText = noTexts[noClickCount];
+                noButton.style.position = "absolute";
+                noButton.style.left = positions[Math.floor(Math.random() * positions.length)].left;
+                noButton.style.top = positions[Math.floor(Math.random() * positions.length)].top;
+                noClickCount++;
+            } else {
+                noButton.innerText = "porfavor 😔";
+                yesButton.classList.add("hidden");
+                stopHeartsAndFlowers();
+                let sadInterval = setInterval(() => createEmoji("😔💔"), 300);
+
+                setTimeout(() => {
+                    clearInterval(sadInterval);
+                    document.body.classList.add("fade-out");
+                    title.classList.add("hidden");
+                    noButton.classList.add("hidden");
+                    mainHeart.innerText = "💔";
+                }, 5000);
+            }
+        });
+
+        letterBox.addEventListener("click", function () {
+            letterBox.remove();
+            mainContent.classList.remove("hidden");
+        });
+    </script>
+</body>
+</html>
